@@ -29,8 +29,18 @@ In the first task, you will explore how k-Means perform on datasets with diverse
 # Change the arguments and return according to 
 # the question asked. 
 
-def fit_kmeans():
-    return None
+def fit_kmeans(data, n_clusters):
+    X, _ = data
+
+    scalar = StandardScaler()
+    X_scalar = scalar.fit_transform(X)
+    #k-means
+    kmeans = cluster.KMeans(n_clusters = n_clusters, init = 'random', random_state=42)
+    kmeans.fit(X_scalar)
+    # label prediction
+    labels = kmeans.predict(X_scalar)
+
+    return labels
 
 
 def compute():
@@ -56,7 +66,7 @@ def compute():
     X_anisotrop = np.dot(X, transformation)
     anisotrop = (X_anisotrop, y)
 
-    # blobs
+    # blobs 
     blobs_normal = datasets.make_blobs(n_samples = n_samples, random_state = seed)
 
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
