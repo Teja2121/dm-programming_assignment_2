@@ -39,10 +39,35 @@ def compute():
     """
     A.	Load the following 5 datasets with 100 samples each: noisy_circles (nc), noisy_moons (nm), blobs with varied variances (bvv), Anisotropicly distributed data (add), blobs (b). Use the parameters from (https://scikit-learn.org/stable/auto_examples/cluster/plot_cluster_comparison.html), with any random state. (with random_state = 42). Not setting the correct random_state will prevent me from checking your results.
     """
+    n_samples = 100
+    seed = 42
+    # noisy-circles
+    noisy_circles = datasets.make_circles(n_samples = n_samples, factor = 0.5, noise = 0.05, random_state = seed)
+
+    # noisy-moons
+    noisy_moons = datasets.make_moons(n_samples = n_samples, noise = 0.05, random_state = seed)
+
+    # blobs with varied variances
+    blobs_varied = datasets.make_blobs(n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state = seed)
+
+    # Anisotropicly distributed data
+    X, y = datasets.make_blobs(n_samples = n_samples, random_state = seed)
+    transformation = [[0.6, -0.6], [-0.4, 0.8]]
+    X_anisotrop = np.dot(X, transformation)
+    anisotrop = (X_anisotrop, y)
+
+    # blobs
+    blobs_normal = datasets.make_blobs(n_samples = n_samples, random_state = seed)
 
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
     # 'nc', 'nm', 'bvv', 'add', 'b'. keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
     dct = answers["1A: datasets"] = {}
+    dct["nc"] = [noisy_circles, 'nc']
+    dct["nm"] = [noisy_moons, 'nm']
+    dct["bvv"] = [blobs_varied, 'bvv']
+    dct["add"] = [anisotrop, 'add']
+    dct["b"] = [blobs_normal, 'b']
+    
 
     """
    B. Write a function called fit_kmeans that takes dataset (before any processing on it), i.e., pair of (data, label) Numpy arrays, and the number of clusters as arguments, and returns the predicted labels from k-means clustering. Use the init='random' argument and make sure to standardize the data (see StandardScaler transform), prior to fitting the KMeans estimator. This is the function you will use in the following questions. 
