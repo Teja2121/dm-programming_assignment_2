@@ -35,7 +35,7 @@ def fit_kmeans(data, n_clusters):
     scalar = StandardScaler()
     X_scalar = scalar.fit_transform(X)
     #k-means
-    kmeans = cluster.KMeans(n_clusters = n_clusters, init = 'random', random_state = 80, n_init = 10)
+    kmeans = cluster.KMeans(n_clusters = n_clusters, init = 'random', random_state = 42, n_init = 10)
     kmeans.fit(X_scalar)
     # label prediction
     labels = kmeans.predict(X_scalar)
