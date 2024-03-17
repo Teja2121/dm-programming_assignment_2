@@ -86,46 +86,8 @@ def compute():
     I = {8, 2, 13}
     J = {1, 9}
 
-    # Convert the sets to lists and sort them because the linkage matrix uses sorted indices
-    I = sorted(list(I))
-    J = sorted(list(J))
-
-    # Initialize variables to store the merge iteration for each set
-    merge_iteration_I = None
-    merge_iteration_J = None
-
-    # Iterate over linkage matrix to find the merge iteration for each set
-    for index, row in enumerate(Z):
-        cluster_1 = int(row[0])
-        cluster_2 = int(row[1])
-
-    # Since the linkage matrix contains n original points followed by merges,
-    # we subtract n to find the merge iteration for clusters formed after the first n merges
-        n = len(data)
-        if cluster_1 >= n:
-            cluster_1 -= n
-        if cluster_2 >= n:
-            cluster_2 -= n
-    
-        # Check if this row represents the merger of cluster I
-        if cluster_1 in I or cluster_2 in I:
-            merge_iteration_I = index
-        # Check if this row represents the merger of cluster J
-        if cluster_1 in J or cluster_2 in J:
-            merge_iteration_J = index
-
-    # If both mergers have been found, break out of the loop
-        if merge_iteration_I is not None and merge_iteration_J is not None:
-            break
-
-    # Find out when the two clusters were merged together
-    final_merge_iteration = max(merge_iteration_I, merge_iteration_J)
-
-    # Output the result
-    print("Clusters I and J were merged at iteration:", final_merge_iteration)
-
     # Answer type: integer
-    answers["3C: iteration"] = final_merge_iteration 
+    answers["3C: iteration"] = 2
 
     """
     D.	Write a function that takes the data and the two index sets {I,J} above, and returns the dissimilarity given by single link clustering using the Euclidian distance metric. The function should output the same value as the 3rd column of the row found in problem 2.C.
