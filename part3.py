@@ -16,8 +16,6 @@ from sklearn.cluster import AgglomerativeClustering
 import pickle
 import utils as u
 
-from scipy.spatial.distance import euclidean
-
 """
 Part 3.	
 Hierarchical Clustering: 
@@ -37,7 +35,7 @@ def data_index_function(data, I, J):
         for i in I:
             for j in J:
                 # Eucledian distance is calculated
-                dist = euclidean(data[i], data[j])
+                dist = np.sqrt(np.sum((data[i] - data[j]) ** 2))
                 # updating the min_dist if it is smaller
                 if dist < min_dist:
                     min_dist = dist
