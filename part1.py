@@ -72,11 +72,11 @@ def compute():
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
     # 'nc', 'nm', 'bvv', 'add', 'b'. keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
     dct = answers["1A: datasets"] = {}
-    dct["nc"] = [noisy_circles, 'Noisy circles']
-    dct["nm"] = [noisy_moons, 'Noisy moons']
-    dct["bvv"] = [blobs_varied, 'Blobs with varied variance']
-    dct["add"] = [anisotrop, 'Anisotropicly distributed data ']
-    dct["b"] = [blobs_normal, 'Blobs']
+    dct["nc"] = [noisy_circles, 'nc']
+    dct["nm"] = [noisy_moons, 'nm']
+    dct["bvv"] = [blobs_varied, 'bvv']
+    dct["add"] = [anisotrop, 'add']
+    dct["b"] = [blobs_normal, 'b']
     
 
     """
