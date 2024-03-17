@@ -50,7 +50,7 @@ def compute():
     """
     A.	Load the provided dataset “hierachal_toy_data.mat” using the scipy.io.loadmat function.
     """
-    toy_mat = io.loadmat('D:\\UNI\\Masters\\FSU\\Semester 2\\Data Mining\\Assignments\\Coding Assignment\\2\\hierarchical_toy_data.mat') 
+    toy_mat = io.loadmat('hierarchical_toy_data.mat') 
     print(toy_mat.keys())
     data = toy_mat['X']
 
