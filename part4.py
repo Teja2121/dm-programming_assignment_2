@@ -26,11 +26,26 @@ In this task, you will explore hierarchical clustering over different datasets. 
 # Change the arguments and return according to 
 # the question asked. 
 
-def fit_hierarchical_cluster():
-    return None
+def fit_hierarchical_cluster(data, linkage_type, n_clusters):
+    X, _ = data
+    # Standardize the data
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    # Perform hierarchical clustering
+    clusterer = AgglomerativeClustering(linkage=linkage_type, n_clusters=n_clusters)
+    clusterer.fit(X_scaled)
+    # Return the labels
+    return clusterer.labels_
 
-def fit_modified():
-    return None
+
+def fit_modified(Z):
+    # Calculate the rate of change of the distance between successive merges
+    rate_of_change = np.diff(Z[:, 2])
+    # Find the index of the maximum rate of change
+    cut_off_index = np.argmax(rate_of_change)
+    # Use the distance at the maximum rate of change as the cut-off distance
+    cut_off_distance = Z[cut_off_index, 2]
+    return cut_off_distance
 
 
 def compute():
@@ -39,10 +54,35 @@ def compute():
     """
     A.	Repeat parts 1.A and 1.B with hierarchical clustering. That is, write a function called fit_hierarchical_cluster (or something similar) that takes the dataset, the linkage type and the number of clusters, that trains an AgglomerativeClustering sklearn estimator and returns the label predictions. Apply the same standardization as in part 1.B. Use the default distance metric (euclidean) and the default linkage (ward).
     """
+    n_samples = 100
+    seed = 42
+    # noisy-circles
+    noisy_circles = datasets.make_circles(n_samples = n_samples, factor = 0.5, noise = 0.05, random_state = seed)
+
+    # noisy-moons
+    noisy_moons = datasets.make_moons(n_samples = n_samples, noise = 0.05, random_state = seed)
+
+    # blobs with varied variances
+    blobs_varied = datasets.make_blobs(n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state = seed)
+
+    # Anisotropicly distributed data
+    X, y = datasets.make_blobs(n_samples = n_samples, random_state = seed)
+    transformation = [[0.6, -0.6], [-0.4, 0.8]]
+    X_anisotrop = np.dot(X, transformation)
+    anisotrop = (X_anisotrop, y)
+
+    # blobs 
+    blobs_normal = datasets.make_blobs(n_samples = n_samples, random_state = seed)
 
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
     # keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
     dct = answers["4A: datasets"] = {}
+    dct["nc"] = [noisy_circles, 'nc']
+    dct["nm"] = [noisy_moons, 'nm']
+    dct["bvv"] = [blobs_varied, 'bvv']
+    dct["add"] = [anisotrop, 'add']
+    dct["b"] = [blobs_normal, 'b']
+    
 
     # dct value:  the `fit_hierarchical_cluster` function
     dct = answers["4A: fit_hierarchical_cluster"] = fit_hierarchical_cluster
@@ -53,8 +93,29 @@ def compute():
     Create a pdf of the plots and return in your report. 
     """
 
+    linkage_types = ['single', 'complete', 'ward', 'average']
+    datasets_list = [noisy_circles, noisy_moons, blobs_varied, anisotrop, blobs_normal]
+    dataset_names = ['Noisy Circles', 'Noisy Moons', 'Blobs with Varied Variances', 'Anisotropic', 'Blobs Normal']
+
+    fig, axes = plt.subplots(nrows = len(linkage_types), ncols = len(datasets_list), figsize = (22, 16))
+
+    for i, linkage_type in enumerate(linkage_types):
+        for j, dataset in enumerate(datasets_list):
+            labels = fit_hierarchical_cluster(dataset, linkage_type, 2)
+            axes[i, j].scatter(dataset[0][:, 0], dataset[0][:, 1], c = labels, s = 8, cmap = 'viridis')
+            axes[i, j].set_xticks([])
+            axes[i, j].set_yticks([])
+            if i == 0:
+                axes[i, j].set_title(dataset_names[j])
+            if j == 0:
+                axes[i, j].set_ylabel(linkage_type)
+
+    fig.suptitle('Part 4B - Hierarchical Clustering with Different Linkage Types', fontsize = 15)
+    plt.show()
+
+
     # dct value: list of dataset abbreviations (see 1.C)
-    dct = answers["4B: cluster successes"] = [""]
+    dct = answers["4B: cluster successes"] = ["add","b"]
 
     """
     C.	There are essentially two main ways to find the cut-off point for breaking the diagram: specifying the number of clusters and specifying a maximum distance. The latter is challenging to optimize for without knowing and/or directly visualizing the dendrogram, however, sometimes simple heuristics can work well. The main idea is that since the merging of big clusters usually happens when distances increase, we can assume that a large distance change between clusters means that they should stay distinct. Modify the function from part 1.A to calculate a cut-off distance before classification. Specifically, estimate the cut-off distance as the maximum rate of change of the distance between successive cluster merges (you can use the scipy.hierarchy.linkage function to calculate the linkage matrix with distances). Apply this technique to all the datasets and make a plot similar to part 4.B.
