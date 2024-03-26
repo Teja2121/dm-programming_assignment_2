@@ -31,7 +31,7 @@ def data_index_function(data, I, J):
     # min_dist is being initialized
         min_dist = float('inf')
     
-    # Computing the pariwise distances from the sets provided in I and J
+    # computing the pariwise distances from the sets provided in I and J
         for i in I:
             for j in J:
                 # Eucledian distance is calculated
@@ -67,10 +67,10 @@ def compute():
     print(f"The linkage matrix is: {Z}")
 
     plt.figure(figsize=(25, 10))
-    plt.title('Hierarchical Clustering Dendrogram (Single linkage)')
+    plt.title('Part 3 - Hierarchical Clustering Dendrogram (Single linkage)')
     plt.xlabel('sample index')
     plt.ylabel('distance')
-    dend = dendrogram(Z, leaf_rotation=90., leaf_font_size=8.)
+    dend = dendrogram(Z, leaf_rotation = 90., leaf_font_size = 8.)
     plt.show()
     # Answer: NDArray
     answers["3B: linkage"] = Z
@@ -87,7 +87,7 @@ def compute():
     J = {1, 9}
 
     # Answer type: integer
-    answers["3C: iteration"] = 2
+    answers["3C: iteration"] = 4
 
     """
     D.	Write a function that takes the data and the two index sets {I,J} above, and returns the dissimilarity given by single link clustering using the Euclidian distance metric. The function should output the same value as the 3rd column of the row found in problem 2.C.
@@ -105,14 +105,44 @@ def compute():
     """
 
     # List the clusters. the [{0,1,2}, {3,4}, {5}, {6}, ...] represents a list of lists.
-    answers["3E: clusters"] = [[0, 0], [0, 0]]
+    answers["3E: clusters"] = cluster_sets_at_merge
+
+    def get_cluster_sets(Z, total_points, merge_step):
+        # Dictionary
+        clusters = {i: {i} for i in range(total_points)}
+
+        # Getting to the merge step
+        for i, row in enumerate(Z):
+            if i > merge_step:
+                break
+            # Indexes
+            idx1, idx2 = int(row[0]), int(row[1])
+            # Cluster merging
+            merged_cluster = clusters[idx1] | clusters[idx2]
+            # New indexes
+            new_index = total_points + i
+            clusters[new_index] = merged_cluster
+
+        # Removing old clusters
+            del clusters[idx1], clusters[idx2]
+
+        # Converting to lists of lists
+        cluster_sets = [list(cluster) for cluster in clusters.values()]
+        return cluster_sets
+
+    
+    total_points = len(data)  
+    merge_step = 4  
+    cluster_sets_at_merge = get_cluster_sets(Z, total_points, merge_step)
+    print(cluster_sets_at_merge)
+
 
     """
     F.	Single linked clustering is often criticized as producing clusters where “the rich get richer”, that is, where one cluster is continuously merging with all available points. Does your dendrogram illustrate this phenomenon?
     """
 
     # Answer type: string. Insert your explanation as a string.
-    answers["3F: rich get richer"] = "True, this does happen in the dendogram where the clusters are merging."
+    answers["3F: rich get richer"] = "True, this does happen in the dendogram where one cluster is continously merging with all available points."
 
     return answers
 
