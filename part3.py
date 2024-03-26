@@ -104,9 +104,6 @@ def compute():
     e.g., [{0,1,2},{3,4},{5},{6},…],  that were available when the two clusters in part 2.D were merged.
     """
 
-    # List the clusters. the [{0,1,2}, {3,4}, {5}, {6}, ...] represents a list of lists.
-    answers["3E: clusters"] = cluster_sets_at_merge
-
     def get_cluster_sets(Z, total_points, merge_step):
         # Dictionary
         clusters = {i: {i} for i in range(total_points)}
@@ -135,6 +132,9 @@ def compute():
     merge_step = 4  
     cluster_sets_at_merge = get_cluster_sets(Z, total_points, merge_step)
     print(cluster_sets_at_merge)
+
+    # List the clusters. the [{0,1,2}, {3,4}, {5}, {6}, ...] represents a list of lists.
+    answers["3E: clusters"] = cluster_sets_at_merge
 
 
     """
