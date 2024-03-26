@@ -38,14 +38,14 @@ def fit_hierarchical_cluster(data, linkage_type, n_clusters):
     return clusterer.labels_
 
 
-def fit_modified(Z):
-    # Calculate the rate of change of the distance between successive merges
-    rate_of_change = np.diff(Z[:, 2])
-    # Find the index of the maximum rate of change
-    cut_off_index = np.argmax(rate_of_change)
-    # Use the distance at the maximum rate of change as the cut-off distance
-    cut_off_distance = Z[cut_off_index, 2]
-    return cut_off_distance
+def fit_modified(data, linkage_type):
+    Z = linkage(data[0], method = linkage_type)
+    distances = Z[:, 2]
+    max_rate_of_change = np.max(np.diff(distances))
+    cutoff_distance = distances[np.argmax(np.diff(distances))] + max_rate_of_change/2
+    n_clusters = np.sum(distances >= cutoff_distance) + 1  # Number of clusters is one more than number of merges above cutoff
+    labels = fit_hierarchical_cluster(data, linkage_type, n_clusters)
+    return labels, cutoff_distance
 
 
 def compute():
@@ -122,7 +122,25 @@ def compute():
     
     Create a pdf of the plots and return in your report. 
     """
+    linkage_types = ['single', 'complete', 'ward', 'average']
+    datasets_list = [noisy_circles, noisy_moons, blobs_varied, anisotrop, blobs_normal]
+    dataset_names = ['Noisy Circles', 'Noisy Moons', 'Blobs with Varied Variances', 'Anisotropic', 'Blobs Normal']
 
+    fig, axes = plt.subplots(nrows = len(linkage_types), ncols = len(datasets_list), figsize = (22, 16))
+    
+    for i, linkage_type in enumerate(linkage_types):
+        for j, dataset in enumerate(datasets_list):
+            labels, cutoff = fit_modified(dataset, linkage_type)
+            axes[i, j].scatter(dataset[0][:, 0], dataset[0][:, 1], c = labels, s = 8, cmap = 'viridis')
+            axes[i, j].set_xticks([])
+            axes[i, j].set_yticks([])
+            if i == 0:
+                axes[i, j].set_title(dataset_names[j])
+            if j == 0:
+                axes[i, j].set_ylabel(linkage_type)
+
+    fig.suptitle('Part 4C - Hierarchical Clustering with Cut-off Distance', fontsize=15)
+    plt.show()
     # dct is the function described above in 4.C
     dct = answers["4C: modified function"] = fit_modified
 
