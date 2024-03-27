@@ -58,7 +58,7 @@ def compute():
     noisy_moons = datasets.make_moons(n_samples = n_samples, noise = 0.05, random_state = seed)
 
     # blobs with varied variances
-    blobs_varied = datasets.make_blobs(n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state = seed)
+    blobs_varied = datasets.make_blobs(n_samples = n_samples, cluster_std = [1.0, 2.5, 0.5], random_state = seed)
 
     # Anisotropicly distributed data
     X, y = datasets.make_blobs(n_samples = n_samples, random_state = seed)
