@@ -32,7 +32,7 @@ def fit_hierarchical_cluster(data, linkage_type, n_clusters):
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
     # Perform hierarchical clustering
-    clusterer = AgglomerativeClustering(linkage=linkage_type, n_clusters=n_clusters)
+    clusterer = AgglomerativeClustering(linkage = linkage_type, n_clusters = n_clusters)
     clusterer.fit(X_scaled)
     # Return the labels
     return clusterer.labels_
@@ -63,7 +63,7 @@ def compute():
     noisy_moons = datasets.make_moons(n_samples = n_samples, noise = 0.05, random_state = seed)
 
     # blobs with varied variances
-    blobs_varied = datasets.make_blobs(n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state = seed)
+    blobs_varied = datasets.make_blobs(n_samples = n_samples, cluster_std = [1.0, 2.5, 0.5], random_state = seed)
 
     # Anisotropicly distributed data
     X, y = datasets.make_blobs(n_samples = n_samples, random_state = seed)
@@ -77,11 +77,11 @@ def compute():
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
     # keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
     dct = answers["4A: datasets"] = {}
-    dct["nc"] = [noisy_circles, 'nc']
-    dct["nm"] = [noisy_moons, 'nm']
-    dct["bvv"] = [blobs_varied, 'bvv']
-    dct["add"] = [anisotrop, 'add']
-    dct["b"] = [blobs_normal, 'b']
+    dct["nc"] = noisy_circles
+    dct["nm"] = noisy_moons
+    dct["bvv"] = blobs_varied
+    dct["add"] = anisotrop
+    dct["b"] = blobs_normal
     
 
     # dct value:  the `fit_hierarchical_cluster` function
