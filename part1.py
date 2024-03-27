@@ -35,7 +35,7 @@ def fit_kmeans(data, n_clusters):
     scalar = StandardScaler()
     X_scalar = scalar.fit_transform(X)
     #k-means
-    kmeans = cluster.KMeans(n_clusters = n_clusters, init = 'random', random_state = 42, n_init = 10)
+    kmeans = cluster.KMeans(n_clusters = n_clusters, init = 'random', n_init = 10)
     kmeans.fit(X_scalar)
     # label prediction
     labels = kmeans.predict(X_scalar)
@@ -114,7 +114,7 @@ def compute():
             if j == 0:
                 axis[i, j].set_ylabel(f"k={n_clusters}")
 
-    fig.suptitle('Part 1 - Plots', fontsize = 15) 
+    fig.suptitle('Part 1C - Plots', fontsize = 15) 
     plt.show()
 
     # dct value: return a dictionary of one or more abbreviated dataset names (zero or more elements) 
@@ -131,11 +131,34 @@ def compute():
 
     Create a pdf of the plots and return in your report. 
     """
+    datasets_list_2 = [noisy_circles, noisy_moons, blobs_varied, anisotrop, blobs_normal]
+    dataset_names = ['Noisy Circles', 'Noisy Moons', 'Blobs with Varied Variances', 'Anisotropic', 'Blobs Normal']
+
+    # Defining the total number of clusters with the n_clusters_list_2 
+    n_clusters_list_2 = [2, 3]
+
+    # Create a figure with subplots in a 4x5 grid
+    fig, axis = plt.subplots(nrows = 4, ncols = 5, figsize = (22, 16))
+
+
+    for i, n_clusters_2 in enumerate(n_clusters_list_2):
+        for j, dataset in enumerate(datasets_list_2):
+            labels = fit_kmeans(dataset, n_clusters_2)
+            axis[i, j].scatter(dataset[0][:, 0], dataset[0][:, 1], c = labels, s = 8, cmap = 'viridis')
+            axis[i, j].set_xticks([])
+            axis[i, j].set_yticks([])
+            if i == 0:
+                axis[i, j].set_title(dataset_names[j])
+            if j == 0:
+                axis[i, j].set_ylabel(f"k={n_clusters_2}")
+
+    fig.suptitle('Part 1D - Plots', fontsize = 15) 
+    plt.show()
 
     # dct value: list of dataset abbreviations
     # Look at your plots, and return your answers.
     # The plot is part of your report, a pdf file name "report.pdf", in your repository.
-    dct = answers["1D: datasets sensitive to initialization"] = ["nm"]
+    dct = answers["1D: datasets sensitive to initialization"] = ["nm", "nc"]
 
     return answers
 
