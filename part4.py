@@ -81,7 +81,7 @@ def compute():
     dct["nm"] = [noisy_moons, "nm"]
     dct["bvv"] = [blobs_varied, "bvv"]
     dct["add"] = [anisotrop, "add"]
-    dct["b"] = [blobs_normal, "b"]
+    dct["b"] = [blobs_normal, "b", 2]
     
 
     # dct value:  the `fit_hierarchical_cluster` function
