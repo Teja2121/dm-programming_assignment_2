@@ -40,7 +40,7 @@ def fit_kmeans(data, n_clusters):
     X, _ = data
     scalar = StandardScaler()
     X_scaled = scalar.fit_transform(X)
-    kmeans = cluster.KMeans(n_clusters=n_clusters, init='random', random_state = 42, n_init = 10)
+    kmeans = cluster.KMeans(n_clusters=n_clusters, init='random', n_init = 10)
     kmeans.fit(X_scaled)
 
     centroids = kmeans.cluster_centers_
